@@ -4,12 +4,12 @@ import CartIcon from "../Cart/CartIcon";
 
 const HeaderCartButton = (props) => {
 	return (
-		<button>
-			<span>
-				<CartIcon></CartIcon>
+		<button className={classes.button}>
+			<span className={classes.icon}>
+				<CartIcon />
 			</span>
-			<span></span>
-			<span></span>
+			<span>Your Cart</span>
+			<span className={classes.badge}>3</span>
 		</button>
 	);
 };
