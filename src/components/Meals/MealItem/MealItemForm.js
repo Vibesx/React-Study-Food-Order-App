@@ -4,7 +4,7 @@ import Input from "../../UI/Input";
 import classes from "./MealItemForm.module.css";
 
 const MealItemForm = (props) => {
-	const [amountIsValid, setAmountIsValid] = useState(false);
+	const [amountIsValid, setAmountIsValid] = useState(true);
 	const amountInputRef = useRef();
 	const submitHandler = (event) => {
 		event.preventDefault();
@@ -19,6 +19,8 @@ const MealItemForm = (props) => {
 		) {
 			setAmountIsValid(false);
 			return;
+		} else if (!amountIsValid) {
+			setAmountIsValid(true);
 		}
 
 		props.onAddToCart(enteredAmountNumber);

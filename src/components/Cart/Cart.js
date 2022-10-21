@@ -12,9 +12,14 @@ const Cart = (props) => {
 	const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
 	const hasItems = cartCtx.items.length > 0;
 
-	const cartItemRemoveHandler = (id) => {};
+	const cartItemRemoveHandler = (id) => {
+		cartCtx.removeItem(id);
+	};
 
-	const cartItemAddHandler = (item) => {};
+	const cartItemAddHandler = (item) => {
+		// amount: 1 because we increment amount by 1 when clicking +
+		cartCtx.addItem({ ...item, amount: 1 });
+	};
 
 	// .bind() : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
 	// for short, first argument of bind sets the "this" keyword inside the function to provided value, while the rest of the arguments are prepended to the list of arguments passed with function call
