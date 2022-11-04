@@ -1,7 +1,14 @@
+import * as dotenv from "dotenv";
+
 import Card from "../UI/Card";
 import MealItem from "./MealItem/MealItem";
 
 import classes from "./AvailableMeals.module.css";
+
+import useHttpRequest from "../../hooks/use-http-request";
+import { useEffect, useState } from "react";
+
+dotenv.config();
 
 const DUMMY_MEALS = [
 	{
@@ -31,7 +38,18 @@ const DUMMY_MEALS = [
 ];
 
 const AvailableMeals = () => {
-	const mealsList = DUMMY_MEALS.map((meal) => (
+	const { sendRequest } = useHttpRequest();
+	const [meals, setMeals] = useState([]);
+
+	const fetchMealsHandler = async () => {
+		setMeals(await sendRequest(process.env.REACT_APP_MEALS_BASE_URL));
+	};
+
+	useEffect(() => {
+		fetchMealsHandler();
+	}, []);
+
+	const mealsList = meals.map((meal) => (
 		<MealItem
 			id={meal.id}
 			key={meal.id}
