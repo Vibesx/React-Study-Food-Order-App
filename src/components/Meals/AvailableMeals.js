@@ -10,44 +10,37 @@ import { useEffect, useState } from "react";
 
 dotenv.config();
 
-const DUMMY_MEALS = [
-	{
-		id: "m1",
-		name: "Sushi",
-		description: "Finest fish and veggies",
-		price: 22.99,
-	},
-	{
-		id: "m2",
-		name: "Schnitzel",
-		description: "A german specialty!",
-		price: 16.5,
-	},
-	{
-		id: "m3",
-		name: "Barbecue Burger",
-		description: "American, raw, meaty",
-		price: 12.99,
-	},
-	{
-		id: "m4",
-		name: "Green Bowl",
-		description: "Healthy...and green...",
-		price: 18.99,
-	},
-];
-
 const AvailableMeals = () => {
-	const { sendRequest } = useHttpRequest();
+	const { isLoading, httpError, sendRequest } = useHttpRequest();
 	const [meals, setMeals] = useState([]);
 
-	const fetchMealsHandler = async () => {
-		setMeals(await sendRequest(process.env.REACT_APP_MEALS_BASE_URL));
-	};
-
 	useEffect(() => {
-		fetchMealsHandler();
-	}, []);
+		const fetchMeals = async () => {
+			setMeals(await sendRequest(process.env.REACT_APP_MEALS_BASE_URL));
+		};
+		try {
+			fetchMeals();
+		} catch (error) {}
+
+		// side note: to handle error with promises:
+		// fetchMeals().then().catch(() => {<logic>}) (then() is optional if we only want to deal with the error/catch scenario)
+	}, [sendRequest]);
+
+	if (isLoading) {
+		return (
+			<section className={classes.MealsLoading}>
+				<p>Loading...</p>
+			</section>
+		);
+	}
+
+	if (httpError) {
+		return (
+			<section className={classes.MealsError}>
+				<p>{httpError}</p>
+			</section>
+		);
+	}
 
 	const mealsList = meals.map((meal) => (
 		<MealItem

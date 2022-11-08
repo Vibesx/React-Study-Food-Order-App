@@ -1,12 +1,26 @@
-const useHttpRequest = () => {
-	const sendRequest = async (url, options) => {
-		const response = await fetch(url, options);
+import { useCallback, useState } from "react";
 
-		console.log(response);
-		return await response.json();
-	};
+const useHttpRequest = () => {
+	const [isLoading, setIsLoading] = useState(true);
+	const [httpError, setHttpError] = useState();
+	const sendRequest = useCallback(async (url, options) => {
+		try {
+			const response = await fetch(url, options);
+
+			if (!response.ok) {
+				throw new Error("Something went wrong!");
+			}
+			setIsLoading(false);
+			return await response.json();
+		} catch (error) {
+			setIsLoading(false);
+			setHttpError(error.message);
+		}
+	}, []);
 
 	return {
+		isLoading,
+		httpError,
 		sendRequest,
 	};
 };
